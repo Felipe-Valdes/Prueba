@@ -1,29 +1,59 @@
 let classifier;
-let video;
-let resultsP;
+// Model URL
+const imageModelURL = 'https://teachablemachine.withgoogle.com/models/U7_ETARxw/';
 
-function setup() {
-  noCanvas();
-  // Create a camera input
-  video = createCapture(VIDEO);
-  // Initialize the Image Classifier method with MobileNet and the video as the second argument
-  classifier = ml5.imageClassifier('MobileNet', video, modelReady);
-  resultsP = createP('Loading model and video...');
+// Video
+let video;
+let flippedVideo;
+// To store the classification
+let label = "";
+
+// Load the model first
+function preload() {
+  // eslint-disable-next-line prefer-template
+  classifier = ml5.imageClassifier(imageModelURL + 'model.json');
 }
 
-function modelReady() {
-  console.log('Model Ready');
+function setup() {
+  createCanvas(320, 260);
+  // Create the video
+  video = createCapture(VIDEO);
+  video.size(320, 240);
+  video.hide();
+
+  flippedVideo = ml5.flipImage(video)
+  // Start classifying
   classifyVideo();
+}
+
+function draw() {
+  background(0);
+  // Draw the video
+  image(flippedVideo, 0, 0);
+
+  // Draw the label
+  fill(255);
+  textSize(16);
+  textAlign(CENTER);
+  text(label, width / 2, height - 4);
 }
 
 // Get a prediction for the current video frame
 function classifyVideo() {
-  classifier.classify(gotResult);
+  flippedVideo = ml5.flipImage(video)
+  classifier.classify(flippedVideo, gotResult);
 }
 
 // When we get a result
-function gotResult(err, results) {
+function gotResult(error, results) {
+  // If there is an error
+  if (error) {
+    console.error(error);
+    return;
+  }
   // The results are in an array ordered by confidence.
-  resultsP.html(`${results[0].label} ${nf(results[0].confidence, 0, 2)}`);
+  // console.log(results[0]);
+  label = results[0].label;
+  // Classifiy again!
   classifyVideo();
 }
