@@ -48,7 +48,6 @@ function gotResult(error, results) {
   console.log(results);
   // Show the first label and confidence
   label.html(`Label: ${results[0].label}`);
-  confidence.html(`Confidence: ${nf(results[0].confidence, 0, 2)}`); // Round the confidence to 0.01
 
   if (results[0].confidence > 0.999) {
     confidence.style('color', 'green');
@@ -56,6 +55,12 @@ function gotResult(error, results) {
     confidence.style('color', 'red');
   }
 
+  if (results[0].confidence > 0.999) {
+    confidence.html(`Confidence: ${nf(results[0].confidence, 0, 2)}⭐`);
+  } else {
+    confidence.html(`Confidence: ${nf(results[0].confidence, 0, 2)}`);
+  }
+  
   // Call classifyVideo again
   classifyVideo();
 }
