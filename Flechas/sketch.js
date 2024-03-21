@@ -1,6 +1,6 @@
 let classifier;
 // Model URL
-const imageModelURL = 'https://teachablemachine.withgoogle.com/models/bXy2kDNi/';
+const imageModelURL = 'https://teachablemachine.withgoogle.com/models/U7_ETARxw/';
 
 // Video
 let video;
