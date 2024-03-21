@@ -34,7 +34,7 @@ function setup() {
   // Configuración del juego de la serpiente
   w = floor(width / rez); // Calcula el ancho del campo de juego en unidades de juego.
   h = floor(height / rez); // Calcula la altura del campo de juego en unidades de juego.
-  frameRate(5); // Establece la velocidad del juego a 5 cuadros por segundo.
+  frameRate(2); // Establece la velocidad del juego a 5 cuadros por segundo.
   snake = new Snake(); // Crea una nueva instancia de la serpiente.
   foodLocation(); // Coloca la comida en una ubicación inicial aleatoria.
 }
