@@ -19,7 +19,7 @@ function preload() {
       width: 280,
       height: 280,
       aspectRatio: 1
-    } 
+    }
   });
   // Load the DoodleNet Image Classification model
   classifier = ml5.imageClassifier(modelo, video);
@@ -49,6 +49,13 @@ function gotResult(error, results) {
   // Show the first label and confidence
   label.html(`Label: ${results[0].label}`);
   confidence.html(`Confidence: ${nf(results[0].confidence, 0, 2)}`); // Round the confidence to 0.01
+
+  if (results[0].confidence > 0.999) {
+    confidence.style('color', 'green');
+  } else {
+    confidence.style('color', 'red');
+  }
+
   // Call classifyVideo again
   classifyVideo();
 }
