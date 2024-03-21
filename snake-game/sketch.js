@@ -9,7 +9,11 @@ let classifier;
 // Model URL
 const imageModelURL = 'https://teachablemachine.withgoogle.com/models/U7_ETARxw/';
 
-// Carga el modelo primero
+// Video
+let video;
+let flippedVideo;
+
+// Load the model first
 function preload() {
   classifier = ml5.imageClassifier(imageModelURL + 'model.json');
 }
@@ -21,6 +25,13 @@ function setup() {
   h = floor(height / rez); // Calcula la altura del campo de juego en unidades de juego.
   snake = new Snake(); // Crea una nueva instancia de la serpiente.
   foodLocation(); // Coloca la comida en una ubicación inicial aleatoria.
+
+  // Crear el elemento de video
+  video = createCapture(VIDEO);
+  video.size(320, 240); // Ajustar el tamaño del video
+  video.hide(); // Ocultar el elemento de video
+
+  flippedVideo = ml5.flipImage(video);
   classifyVideo(); // Comienza a clasificar el video
 }
 
@@ -33,7 +44,8 @@ function foodLocation() {
 
 // Get a prediction for the current video frame
 function classifyVideo() {
-  classifier.classify(gotResult);
+  flippedVideo = ml5.flipImage(video);
+  classifier.classify(flippedVideo, gotResult);
 }
 
 // When we get a result
@@ -66,6 +78,8 @@ function gotResult(error, results) {
 function draw() {
   scale(rez); // Escala todo el dibujo por el factor de resolución.
   background(220); // Establece el color de fondo del lienzo.
+  image(flippedVideo, 0, 0, 20, 15); // Mostrar video
+
   if (snake.eat(food)) {
     foodLocation(); // Si la serpiente come la comida, genera una nueva ubicación para la comida.
   }
