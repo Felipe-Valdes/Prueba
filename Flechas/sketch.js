@@ -29,13 +29,14 @@ function setup() {
 function draw() {
   background(0);
   // Draw the video
-  image(flippedVideo, 0, 250);
+  image(flippedVideo, 0, 0);
 
   // Draw the label
   fill(255);
   textSize(16);
   textAlign(CENTER);
   text(label, width / 2, height - 4);
+  text.position(500, 10);
 }
 
 // Get a prediction for the current video frame
