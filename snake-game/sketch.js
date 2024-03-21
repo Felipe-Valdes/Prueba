@@ -4,15 +4,24 @@ let rez = 20; // Factor de resolución para escalar todo el juego.
 let food;
 let w; // Ancho del campo de juego en "unidades" de juego, no en píxeles.
 let h; // Altura del campo de juego en "unidades" de juego, no en píxeles.
+let classifier;
+
+// Model URL
+const imageModelURL = 'https://teachablemachine.withgoogle.com/models/U7_ETARxw/';
+
+// Carga el modelo primero
+function preload() {
+  classifier = ml5.imageClassifier(imageModelURL + 'model.json');
+}
 
 // Función de configuración inicial para p5.js, se llama una vez al inicio.
 function setup() {
   createCanvas(400, 400); // Crea un lienzo de 400x400 píxeles.
   w = floor(width / rez); // Calcula el ancho del campo de juego en unidades de juego.
   h = floor(height / rez); // Calcula la altura del campo de juego en unidades de juego.
-  frameRate(2); // Establece la velocidad del juego a 5 cuadros por segundo.
   snake = new Snake(); // Crea una nueva instancia de la serpiente.
   foodLocation(); // Coloca la comida en una ubicación inicial aleatoria.
+  classifyVideo(); // Comienza a clasificar el video
 }
 
 // Genera una nueva ubicación para la comida en el campo de juego.
@@ -22,20 +31,35 @@ function foodLocation() {
   food = createVector(x, y); // Crea un vector para la posición de la comida.
 }
 
-// Función que se llama cada vez que se presiona una tecla.
-function keyPressed() {
-  // Cambia la dirección de la serpiente basándose en la tecla presionada.
-  if (keyCode === LEFT_ARROW) {
-    snake.setDir(-1, 0); // Mueve hacia la izquierda.
-  } else if (keyCode === RIGHT_ARROW) {
-    snake.setDir(1, 0); // Mueve hacia la derecha.
-  } else if (keyCode === DOWN_ARROW) {
-    snake.setDir(0, 1); // Mueve hacia abajo.
-  } else if (keyCode === UP_ARROW) {
-    snake.setDir(0, -1); // Mueve hacia arriba.
-  } else if (key == ' ') {
-    snake.grow(); // Hace crecer la serpiente al presionar la barra espaciadora.
+// Get a prediction for the current video frame
+function classifyVideo() {
+  classifier.classify(gotResult);
+}
+
+// When we get a result
+function gotResult(error, results) {
+  // If there is an error
+  if (error) {
+    console.error(error);
+    return;
   }
+  // The results are in an array ordered by confidence.
+  // console.log(results[0]);
+  let label = results[0].label;
+
+  // Cambia la dirección de la serpiente basándose en la clasificación obtenida.
+  if (label === "Up") {
+    snake.setDir(0, -1); // Mueve hacia arriba.
+  } else if (label === "Down") {
+    snake.setDir(0, 1); // Mueve hacia abajo.
+  } else if (label === "Left") {
+    snake.setDir(-1, 0); // Mueve hacia la izquierda.
+  } else if (label === "Right") {
+    snake.setDir(1, 0); // Mueve hacia la derecha.
+  }
+
+  // Classify again!
+  classifyVideo();
 }
 
 // Función de dibujo que p5.js llama en bucle para animar el juego.
