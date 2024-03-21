@@ -20,18 +20,22 @@ function preload() {
 
 // Función de configuración inicial para p5.js, se llama una vez al inicio.
 function setup() {
-  createCanvas(400, 400); // Crea un lienzo de 400x400 píxeles.
+  createCanvas(800, 400); // Crea un lienzo de 800x400 píxeles.
+  let videoCanvas = createGraphics(400, 400); // Crea un lienzo para el video de la cámara
+  let gameCanvas = createGraphics(400, 400); // Crea un lienzo para el juego de la serpiente
+
   w = floor(width / rez); // Calcula el ancho del campo de juego en unidades de juego.
   h = floor(height / rez); // Calcula la altura del campo de juego en unidades de juego.
+
   snake = new Snake(); // Crea una nueva instancia de la serpiente.
   foodLocation(); // Coloca la comida en una ubicación inicial aleatoria.
 
-  // Crear el elemento de video
+  // Inicializar la cámara y clasificar el video
   video = createCapture(VIDEO);
-  video.size(320, 240); // Ajustar el tamaño del video
+  video.size(400, 400); // Establecer el tamaño del video
   video.hide(); // Ocultar el elemento de video
-
   flippedVideo = ml5.flipImage(video);
+
   classifyVideo(); // Comienza a clasificar el video
 }
 
@@ -76,13 +80,12 @@ function gotResult(error, results) {
 
 // Función de dibujo que p5.js llama en bucle para animar el juego.
 function draw() {
-  scale(rez); // Escala todo el dibujo por el factor de resolución.
   background(220); // Establece el color de fondo del lienzo.
-  image(flippedVideo, 0, 0, 20, 15); // Mostrar video
 
-  if (snake.eat(food)) {
-    foodLocation(); // Si la serpiente come la comida, genera una nueva ubicación para la comida.
-  }
+  // Dibujar el video de la cámara en su propio lienzo
+  image(flippedVideo, 0, 0, 400, 400);
+
+  // Dibujar el juego de la serpiente en su propio lienzo
   snake.update(); // Actualiza la posición de la serpiente.
   snake.show(); // Dibuja la serpiente en el lienzo.
 
@@ -93,8 +96,8 @@ function draw() {
     noLoop(); // Detiene el bucle de dibujo, finalizando el juego.
   }
 
-  // Dibuja la comida en el campo de juego.
+  // Dibujar la comida en el campo de juego.
   noStroke(); // No dibuja bordes para la comida.
   fill(255, 0, 0); // Establece el color de la comida a rojo.
-  rect(food.x, food.y, 1, 1); // Dibuja la comida como un cuadrado.
+  rect(food.x * rez, food.y * rez, rez, rez); // Dibuja la comida como un cuadrado.
 }
