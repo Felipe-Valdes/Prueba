@@ -29,7 +29,7 @@ function setup() {
 function draw() {
   background(0);
   // Draw the video
-  image(flippedVideo, 0, 0);
+  image(flippedVideo, 0, 250);
 
   // Draw the label
   fill(255);

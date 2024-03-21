@@ -45,24 +45,6 @@ function setup() {
   foodLocation(); // Coloca la comida en una ubicación inicial aleatoria.
 }
 
-// Función de dibujo que p5.js llama en bucle para animar el juego.
-function draw() {
-  // Dibuja la serpiente y el juego en el lienzo del juego
-  canvasSnake.background(220); // Establece el color de fondo del lienzo.
-  canvasSnake.scale(rez); // Escala todo el dibujo por el factor de resolución.
-  snake.show(); // Dibuja la serpiente en el lienzo del juego
-  noStroke(); // No dibuja bordes para la comida.
-  fill(255, 0, 0); // Establece el color de la comida a rojo.
-  rect(food.x, food.y, 1, 1); // Dibuja la comida como un cuadrado.
-
-  // Dibuja la cámara y el label en el lienzo de la cámara
-  canvasCamera.background(220); // Establece el color de fondo del lienzo.
-  canvasCamera.image(video, 0, 0, 400, 400); // Dibuja el video de la cámara en el lienzo
-  canvasCamera.fill(0); // Color de relleno para el texto del label
-  canvasCamera.textSize(16); // Tamaño del texto del label
-  canvasCamera.text(label, 10, 20); // Muestra el label en el lienzo de la cámara
-}
-
 
 // Función de dibujo que p5.js llama en bucle para animar el juego.
 function draw() {
