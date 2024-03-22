@@ -8,16 +8,11 @@ let classifier;
 const imageModelURL = 'https://teachablemachine.withgoogle.com/models/U7_ETARxw/';
 let video;
 let flippedVideo;
-let label = "";
 
 function preload() {
   // eslint-disable-next-line prefer-template
   classifier = ml5.imageClassifier(imageModelURL + 'model.json');
 }
-
-
-let canvasSnake; // Lienzo para el juego de la serpiente
-let canvasCamera; // Lienzo para la cámara y el label
 
 // Función de configuración inicial para p5.js, se llama una vez al inicio.
 function setup() {
@@ -27,7 +22,6 @@ function setup() {
   video.size(400, 400); // Tamaño del video
   flippedVideo = ml5.flipImage(video)
   classifyVideo();
-
 
 
   createCanvas(400, 400); // Crea un lienzo de 400x400 píxeles.
